@@ -17,4 +17,6 @@ export type PlanetsType = {
 export type ContextType = {
   contextAPI: () => void,
   planetData: PlanetsType[],
+  searchTerm: string,
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>,
 };

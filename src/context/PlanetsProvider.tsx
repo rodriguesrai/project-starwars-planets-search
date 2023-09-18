@@ -9,6 +9,7 @@ type PlanetsProviderProps = {
 
 function PlanetsProvider({ children }: PlanetsProviderProps) {
   const [planetData, setPlanetData] = useState<PlanetsType[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const contextAPI = async (): Promise<void> => {
     try {
@@ -24,7 +25,11 @@ function PlanetsProvider({ children }: PlanetsProviderProps) {
   }, []);
 
   return (
-    <PlanetsContext.Provider value={ { planetData, contextAPI } }>
+    <PlanetsContext.Provider
+      value={
+       { planetData, contextAPI, searchTerm, setSearchTerm }
+}
+    >
       {children}
     </PlanetsContext.Provider>
   );
