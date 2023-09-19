@@ -10,7 +10,7 @@ function Table() {
 
   const optionsCollumns = [
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
-  const [availableColumns, setAvailableColumns] = useState([...optionsCollumns]);
+  const [availableColumns, setAvailableColumns] = useState(optionsCollumns);
 
   const columnOrder = [
     'name',
@@ -53,7 +53,7 @@ function Table() {
       setSelectedColumn(updatedColumns[0] || '');
       setSelectedComparison('maior que');
       setFilterValue('0');
-
+      setAvailableColumns((prevColumns) => [...prevColumns, column]);
       return updatedFilters;
     });
   };
@@ -68,6 +68,9 @@ function Table() {
           value: filterValue,
         },
       ]);
+      setAvailableColumns(
+        (prevColumns) => prevColumns.filter((col) => col !== selectedColumn),
+      );
     }
     console.log(filterList);
   };
@@ -100,11 +103,9 @@ function Table() {
           value={ selectedColumn }
           onChange={ handleColumnChange }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {availableColumns.map((column) => (
+            <option key={ column } value={ column }>{column}</option>
+          ))}
         </select>
 
         <select
