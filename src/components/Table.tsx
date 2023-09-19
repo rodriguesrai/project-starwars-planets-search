@@ -10,7 +10,7 @@ function Table() {
 
   const optionsCollumns = [
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
-  const [availableColumns, setAvailableColumns] = useState([...optionsCollumns]);
+  const [availableColumns, setAvailableColumns] = useState(optionsCollumns);
 
   const columnOrder = [
     'name',

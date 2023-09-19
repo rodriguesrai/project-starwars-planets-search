@@ -47,7 +47,7 @@ describe('Testando os elementos da página', () => {
       expect(tatooineCell).not.toBeInTheDocument();
     });
   });
-  it('Verificando funções do filtro number e selection', () => { 
+  it('Verificando funções do filtro number e selection', async () => { 
     const { buttonFilter, inputNumber, selectColumn, selectComparison } = setup();
   
     userEvent.selectOptions(selectColumn, 'population');
@@ -60,5 +60,9 @@ describe('Testando os elementos da página', () => {
     });
   
     expect(tatooineCell).not.toBeInTheDocument();
+    const buttonDelete = screen.getByTestId('button-remove-filter');
+    await userEvent.click(buttonDelete);
+    expect(buttonDelete).not.toBeInTheDocument();
+
    })
 });
