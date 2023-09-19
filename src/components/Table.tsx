@@ -43,36 +43,26 @@ function Table() {
   };
 
   const handleRemoveFilter = (column) => {
-    setFilterList((prevFilters) => {
-      const updatedFilters = prevFilters.filter((filter) => filter.column !== column);
-
-      const remainingColumns = updatedFilters.map((filter) => filter.column);
-
-      const updatedColumns = columnOrder.filter((col) => !remainingColumns.includes(col));
-
-      setSelectedColumn(updatedColumns[0] || '');
-      setSelectedComparison('maior que');
-      setFilterValue('0');
-      setAvailableColumns((prevColumns) => [...prevColumns, column]);
-      return updatedFilters;
-    });
+    setAvailableColumns([
+      ...availableColumns,
+      column,
+    ]);
+    const filtredFilters = filterList.filter((filter) => filter.column !== column);
+    setFilterList(filtredFilters);
   };
 
   const handleAddFilter = () => {
-    if (selectedColumn !== '' && selectedComparison !== '' && filterValue !== 0) {
-      setFilterList([
-        ...filterList,
-        {
-          column: selectedColumn,
-          comparison: selectedComparison,
-          value: filterValue,
-        },
-      ]);
-      setAvailableColumns(
-        (prevColumns) => prevColumns.filter((col) => col !== selectedColumn),
-      );
-    }
-    console.log(filterList);
+    setFilterList([
+      ...filterList,
+      {
+        column: selectedColumn,
+        comparison: selectedComparison,
+        value: filterValue,
+      },
+    ]);
+    const filtredColumns = availableColumns.filter((col) => col !== selectedColumn);
+    setAvailableColumns(filtredColumns);
+    setSelectedColumn(filtredColumns[0]);
   };
 
   const filteredPlanetsByName = planetData
@@ -103,8 +93,8 @@ function Table() {
           value={ selectedColumn }
           onChange={ handleColumnChange }
         >
-          {availableColumns.map((column) => (
-            <option key={ column } value={ column }>{column}</option>
+          {availableColumns.map((column, index) => (
+            <option key={ index } value={ column }>{column}</option>
           ))}
         </select>
 
