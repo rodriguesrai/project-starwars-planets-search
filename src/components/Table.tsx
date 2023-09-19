@@ -8,6 +8,10 @@ function Table() {
   const [selectedComparison, setSelectedComparison] = useState('maior que');
   const [filterValue, setFilterValue] = useState('0');
 
+  const optionsCollumns = [
+    'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+  const [availableColumns, setAvailableColumns] = useState([...optionsCollumns]);
+
   const columnOrder = [
     'name',
     'climate',
@@ -34,6 +38,25 @@ function Table() {
   const handleValueChange = (event) => {
     setFilterValue(event.target.value);
   };
+  const handleRemoveAllFilters = () => {
+    setFilterList([]);
+  };
+
+  const handleRemoveFilter = (column) => {
+    setFilterList((prevFilters) => {
+      const updatedFilters = prevFilters.filter((filter) => filter.column !== column);
+
+      const remainingColumns = updatedFilters.map((filter) => filter.column);
+
+      const updatedColumns = columnOrder.filter((col) => !remainingColumns.includes(col));
+
+      setSelectedColumn(updatedColumns[0] || '');
+      setSelectedComparison('maior que');
+      setFilterValue('0');
+
+      return updatedFilters;
+    });
+  };
 
   const handleAddFilter = () => {
     if (selectedColumn !== '' && selectedComparison !== '' && filterValue !== 0) {
@@ -46,6 +69,7 @@ function Table() {
         },
       ]);
     }
+    console.log(filterList);
   };
 
   const filteredPlanetsByName = planetData
@@ -114,6 +138,25 @@ function Table() {
           data-testid="name-filter"
         />
       </div>
+      <div>
+        {filterList.map((filter, index) => (
+          <div key={ index } data-testid="filter">
+            <p>{`${filter.column} ${filter.comparison} ${filter.value}`}</p>
+            <button
+              onClick={ () => handleRemoveFilter(filter.column) }
+              data-testid="button-remove-filter"
+            >
+              X
+            </button>
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={ handleRemoveAllFilters }
+        data-testid="button-remove-filters"
+      >
+        Remover todas filtragens
+      </button>
       <table>
         <thead>
           <tr>
