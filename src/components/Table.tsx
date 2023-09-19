@@ -43,33 +43,26 @@ function Table() {
   };
 
   const handleRemoveFilter = (column) => {
-    setFilterList((prevFilters) => {
-      const updatedFilters = prevFilters.filter((filter) => filter.column !== column);
-
-      const remainingColumns = updatedFilters.map((filter) => filter.column);
-
-      const updatedColumns = columnOrder.filter((col) => !remainingColumns.includes(col));
-
-      setSelectedColumn(updatedColumns[0] || '');
-      setSelectedComparison('maior que');
-      setFilterValue('0');
-
-      return updatedFilters;
-    });
+    setAvailableColumns([
+      ...availableColumns,
+      column,
+    ]);
+    const filtredFilters = filterList.filter((filter) => filter.column !== column);
+    setFilterList(filtredFilters);
   };
 
   const handleAddFilter = () => {
-    if (selectedColumn !== '' && selectedComparison !== '' && filterValue !== 0) {
-      setFilterList([
-        ...filterList,
-        {
-          column: selectedColumn,
-          comparison: selectedComparison,
-          value: filterValue,
-        },
-      ]);
-    }
-    console.log(filterList);
+    setFilterList([
+      ...filterList,
+      {
+        column: selectedColumn,
+        comparison: selectedComparison,
+        value: filterValue,
+      },
+    ]);
+    const filtredColumns = availableColumns.filter((col) => col !== selectedColumn);
+    setAvailableColumns(filtredColumns);
+    setSelectedColumn(filtredColumns[0]);
   };
 
   const filteredPlanetsByName = planetData
@@ -100,11 +93,11 @@ function Table() {
           value={ selectedColumn }
           onChange={ handleColumnChange }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {availableColumns.map((column, index) => (
+            <option key={ index } value={ column }>
+              {column}
+            </option>
+          ))}
         </select>
 
         <select
