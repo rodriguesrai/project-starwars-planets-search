@@ -1,8 +1,5 @@
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import App from '../App';
-import PlanetsProvider from '../context/PlanetsProvider';
-import fetchData from '../api';
 import userEvent from '@testing-library/user-event';
 
 describe('Testando os elementos da página', () => { 
@@ -36,7 +33,7 @@ describe('Testando os elementos da página', () => {
     expect(selectComparison).toHaveTextContent('maior que');
   });
 
-  it('Verificando funções dos botões de filtro', async () => { 
+  it('Verificando funções do filtro por nome', async () => { 
     const { buttonFilter, inputTerm } = setup();
   
     await userEvent.type(inputTerm, 'Alderaan');
@@ -50,4 +47,18 @@ describe('Testando os elementos da página', () => {
       expect(tatooineCell).not.toBeInTheDocument();
     });
   });
+  it('Verificando funções do filtro number e selection', () => { 
+    const { buttonFilter, inputNumber, selectColumn, selectComparison } = setup();
+  
+    userEvent.selectOptions(selectColumn, 'population');
+    userEvent.selectOptions(selectComparison, 'maior que');
+    userEvent.type(inputNumber, '100000');
+    userEvent.click(buttonFilter);
+  
+    const tatooineCell = screen.queryByRole('cell', {
+      name: /tatooine/i
+    });
+  
+    expect(tatooineCell).not.toBeInTheDocument();
+   })
 });
