@@ -3,7 +3,17 @@ import PlanetsContext from '../context/DataContext';
 
 function Table() {
   const { planetData, searchTerm, setSearchTerm } = useContext(PlanetsContext);
-  const [filterList, setFilterList] = useState([]);
+  const [
+    filterList,
+    setFilterList,
+  ] = useState<
+  {
+    column: string;
+    comparison: string;
+    value: string;
+  }[]
+  >([]);
+
   const [selectedColumn, setSelectedColumn] = useState('population');
   const [selectedComparison, setSelectedComparison] = useState('maior que');
   const [filterValue, setFilterValue] = useState('0');
@@ -27,22 +37,22 @@ function Table() {
     'edited',
     'url',
   ];
-  const handleColumnChange = (event) => {
+  const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedColumn(event.target.value);
   };
 
-  const handleComparisonChange = (event) => {
+  const handleComparisonChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedComparison(event.target.value);
   };
 
-  const handleValueChange = (event) => {
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterValue(event.target.value);
   };
   const handleRemoveAllFilters = () => {
     setFilterList([]);
   };
 
-  const handleRemoveFilter = (column) => {
+  const handleRemoveFilter = (column: string) => {
     setAvailableColumns([
       ...availableColumns,
       column,
